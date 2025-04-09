@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 0 0% 7%;
+  --foreground: 0 0% 98%;
+  --card: 0 0% 10%;
+  --card-foreground: 0 0% 98%;
+  --popover: 0 0% 10%;
+  --popover-foreground: 0 0% 98%;
+  --primary: 263 100% 50%;
+  --primary-foreground: 0 0% 98%;
+  --secondary: 0 0% 15%;
+  --secondary-foreground: 0 0% 98%;
+  --muted: 0 0% 15%;
+  --muted-foreground: 0 0% 65%;
+  --accent: 263 100% 50%;
+  --accent-foreground: 0 0% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 0 0% 20%;
+  --input: 0 0% 20%;
+  --ring: 263 100% 50%;
+}
+
+body {
+  background-color: #121212;
+  color: white;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 12px; /* Width of the scrollbar */
+  height: 12px; /* Height of the scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background: #121212; /* Track color (deep black) */
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #6E00FF; /* Thumb color (neon purple) */
+  border-radius: 10px;
+  border: 3px solid #121212; /* Border around the thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #9A00FF; /* Slightly lighter purple when hovered */
+}
+
+::-webkit-scrollbar-button {
+  display: none; /* Hides the scrollbar buttons */
+}
+
+/* For Firefox */
+scrollbar-color: #6E00FF #121212;
+scrollbar-width: thin;
