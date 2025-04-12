@@ -8,16 +8,17 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Eye, EyeOff } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 export default function LoginPage() {
+  const router = useRouter()
   const [showPassword, setShowPassword] = useState(false)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    // Handle login logic here
-    console.log({ email, password })
+    router.push("/client")
   }
 
   return (
@@ -80,7 +81,7 @@ export default function LoginPage() {
                   className="bg-[#1A1A1A] border-[#6E00FF]/30 text-white focus:border-[#6E00FF] focus:ring-0"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  required
+                  // required
                 />
               </div>
 
@@ -99,7 +100,7 @@ export default function LoginPage() {
                     className="bg-[#1A1A1A] border-[#6E00FF]/30 text-white focus:border-[#6E00FF] focus:ring-0"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    required
+                    // required
                   />
                   <button
                     type="button"

@@ -51,41 +51,48 @@ const NavLink: React.FC<NavLinkProps> = ({ href, children, dropdownItems, isActi
 }
 
 // Animated button component using only Tailwind
+
+
 const AnimatedButton: React.FC<{
   children: React.ReactNode
   className?: string
   variant?: "default" | "outline"
   href?: string
 }> = ({ children, className = "", variant = "default", href }) => {
-  const baseClasses = "relative overflow-hidden group " + className
+  const baseClasses = `relative inline-flex items-center justify-center h-10 px-6 py-2 rounded-md overflow-hidden transition-all duration-300 group ${className}`
+
   const variantClasses =
     variant === "default"
-      ? "bg-[#6E00FF] hover:bg-[#6E00FF]/80 text-white"
-      : "border-[#6E00FF] text-white hover:bg-[#6E00FF]/10"
+      ? "bg-[#6E00FF] text-white hover:bg-[#6E00FF]/90"
+      : "border border-[#6E00FF] text-white hover:bg-[#6E00FF]/10"
 
-  const buttonContent = (
+  const content = (
     <>
+      {/* Glow effect on hover */}
+      <span className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
+      
+      {/* Subtle border on hover */}
+      <span className="absolute inset-0 border border-white/20 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
       <span className="relative z-10">{children}</span>
-      <span className="absolute inset-0 border border-white/20 rounded-md opacity-0 group-hover:opacity-100 transition-opacity"></span>
-      <span className="absolute top-0 left-0 w-full h-full">
-        <span className="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-transparent via-white to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-[spin_2s_linear_infinite] origin-center"></span>
-      </span>
     </>
   )
 
   if (href) {
     return (
-      <Link
-        href={href}
-        className={`${baseClasses} ${variantClasses} inline-flex items-center justify-center h-10 px-4 py-2 rounded-md`}
-      >
-        {buttonContent}
+      <Link href={href} className={`${baseClasses} ${variantClasses}`}>
+        {content}
       </Link>
     )
   }
 
-  return <Button className={`${baseClasses} ${variantClasses}`}>{buttonContent}</Button>
+  return (
+    <Button className={`${baseClasses} ${variantClasses}`}>
+      {content}
+    </Button>
+  )
 }
+
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
