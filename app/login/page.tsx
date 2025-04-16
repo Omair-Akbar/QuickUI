@@ -18,7 +18,8 @@ export default function LoginPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    router.push("/client")
+    if(email === "admin@123" && password === "admin") router.push("/admin")
+    else router.push("/client")
   }
 
   return (
