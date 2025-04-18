@@ -100,7 +100,7 @@ export default function Hero() {
               Build <span className="text-[#6E00FF]">faster</span> with premium
               React & Next.js templates
             </h1>
-            <p className="mt-6 text-gray-400 text-lg md:text-xl">
+            <p className="mt-7 text-gray-400 text-lg md:text-xl">
               Discover high-quality, customizable templates built by expert
               developers. Save time and launch your projects in minutes.
             </p>
