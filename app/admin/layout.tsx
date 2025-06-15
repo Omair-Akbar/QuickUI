@@ -24,14 +24,17 @@ export default function RootLayout({
       <body className={`${inter.className} dark`}>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange>
           <SidebarProvider>
-            <div className="flex min-h-screen">
+            {/* <div className="min-h-screen"> */}
               <AdminSidebar />
               <main className="flex-1">{children}</main>
-            </div>
+            {/* </div> */}
           </SidebarProvider>
         </ThemeProvider>
       </body>
     </html>
+    // <div className="bg-orange-50 w-full h-screen">
+
+    // </div>
   )
 }
 
