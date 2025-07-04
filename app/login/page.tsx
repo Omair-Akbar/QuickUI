@@ -2,13 +2,13 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Eye, EyeOff } from "lucide-react"
 import { useRouter } from "next/navigation"
+import RobotCanvas from "@/components/robot-model"
 
 export default function LoginPage() {
   const router = useRouter()
@@ -16,9 +16,9 @@ export default function LoginPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault()
-    if(email === "admin@123" && password === "admin") router.push("/admin")
+    if (email === "admin@123" && password === "admin") router.push("/admin")
     else router.push("/client")
   }
 
@@ -40,7 +40,7 @@ export default function LoginPage() {
           <div className="flex gap-4 mb-6">
             <Button
               variant="outline"
-              className="w-full border-[#6E00FF]/30 hover:bg-[#6E00FF]/10 text-white"
+              className="w-full border-[#6E00FF]/30 hover:bg-[#6E00FF]/10 text-white bg-transparent"
               onClick={() => console.log("Google login")}
             >
               <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
@@ -82,7 +82,6 @@ export default function LoginPage() {
                   className="bg-[#1A1A1A] border-[#6E00FF]/30 text-white focus:border-[#6E00FF] focus:ring-0"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  // required
                 />
               </div>
 
@@ -101,7 +100,6 @@ export default function LoginPage() {
                     className="bg-[#1A1A1A] border-[#6E00FF]/30 text-white focus:border-[#6E00FF] focus:ring-0"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    // required
                   />
                   <button
                     type="button"
@@ -135,24 +133,19 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* Right side - Image */}
+      {/* Right side - 3D Robot */}
       <div className="hidden md:block w-1/2 bg-[#1A1A1A] relative">
+        {/* Background effects - same as hero */}
         <div className="absolute inset-0 z-0 opacity-30">
           <div className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full bg-[#6E00FF]/30 blur-[100px]" />
           <div className="absolute bottom-1/4 right-1/4 w-64 h-64 rounded-full bg-[#6E00FF]/30 blur-[100px]" />
         </div>
+
+        {/* 3D Robot Container */}
         <div className="absolute inset-0 flex items-center justify-center p-12">
-          <div className="relative w-full h-full max-w-lg">
-            <Image
-              src="/placeholder.svg?height=600&width=600"
-              alt="Login illustration"
-              fill
-              className="object-contain"
-            />
-          </div>
+          <RobotCanvas className="w-full h-full max-w-lg" />
         </div>
       </div>
     </div>
   )
 }
-

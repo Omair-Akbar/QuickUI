@@ -13,6 +13,7 @@ import com1 from "@/public/com1.png"
 import com2 from "@/public/com2.png"
 import com3 from "@/public/com3.png"
 import Image from "next/image";
+import RobotCanvas from "./robot-model";
 
 
 function RobotModel({ mousePosition }:{mousePosition:any}) {
@@ -143,30 +144,9 @@ export default function Hero() {
             </div>
           </div>
 
-          <div
-            id="robot-container"
-            className="h-[400px] md:h-[500px] lg:h-[600px] w-full relative"
-          >
-            <div className="absolute inset-0 bg-gradient-to-b from-[#6E00FF]/20 to-transparent rounded-full blur-md"></div>
-            <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
-              <ambientLight intensity={0.5} />
-              <spotLight
-                position={[10, 10, 10]}
-                angle={0.15}
-                penumbra={1}
-                intensity={1}
-                castShadow
-              />
-              <RobotModel mousePosition={mousePosition} />
-              <Environment preset={"sunset"} />
-              <OrbitControls
-                enableZoom={false}
-                enablePan={false}
-                enableRotate={false}
-              />
-            </Canvas>
-            <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-[#121212] to-transparent"></div>
-          </div>
+           <div id="robot-container" className="h-[400px] md:h-[500px] lg:h-[600px] w-full">
+          <RobotCanvas className="w-full h-full" />
+        </div>
         </div>
       </div>
     </section>

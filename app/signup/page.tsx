@@ -8,6 +8,8 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Eye, EyeOff } from "lucide-react"
+import logo from "@/public/logo.png"
+import RobotCanvas from "@/components/robot-model"
 
 export default function SignupPage() {
   const [showPassword, setShowPassword] = useState(false)
@@ -15,7 +17,7 @@ export default function SignupPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault()
     // Handle signup logic here
     console.log({ name, email, password })
@@ -27,8 +29,8 @@ export default function SignupPage() {
       <div className="w-full md:w-1/2 flex items-center justify-center p-8">
         <div className="w-full max-w-md">
           <div className="mb-8 flex items-center gap-2">
-            <div className="w-8 h-8 rounded-md bg-[#6E00FF] flex items-center justify-center">
-              <span className="font-bold text-white">QU</span>
+            <div className="w-8 h-8 relative">
+              <Image src={logo || "/placeholder.svg"} alt="QuickUI Logo" fill className="object-contain" />
             </div>
             <span className="text-xl font-bold text-white">QuickUI</span>
           </div>
@@ -39,7 +41,7 @@ export default function SignupPage() {
           <div className="flex gap-4 mb-6">
             <Button
               variant="outline"
-              className="w-full border-[#6E00FF]/30 hover:bg-[#6E00FF]/10 text-white"
+              className="w-full border-[#6E00FF]/30 hover:bg-[#6E00FF]/10 text-white bg-transparent"
               onClick={() => console.log("Google signup")}
             >
               <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
@@ -125,7 +127,7 @@ export default function SignupPage() {
                 <Checkbox id="terms" required />
                 <Label htmlFor="terms" className="text-sm text-white/70">
                   I agree to the{" "}
-                  <Link href="/terms" className="text-[#6E00FF] hover:underline">
+                  <Link href="/terms" className="text-[#7f21f9] hover:underline">
                     Terms of Service
                   </Link>{" "}
                   and{" "}
@@ -150,24 +152,19 @@ export default function SignupPage() {
         </div>
       </div>
 
-      {/* Right side - Image */}
+      {/* Right side - 3D Robot */}
       <div className="hidden md:block w-1/2 bg-[#1A1A1A] relative">
+        {/* Background effects - same as hero */}
         <div className="absolute inset-0 z-0 opacity-30">
           <div className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full bg-[#6E00FF]/30 blur-[100px]" />
           <div className="absolute bottom-1/4 right-1/4 w-64 h-64 rounded-full bg-[#6E00FF]/30 blur-[100px]" />
         </div>
+
+        {/* 3D Robot Container */}
         <div className="absolute inset-0 flex items-center justify-center p-12">
-          <div className="relative w-full h-full max-w-lg">
-            <Image
-              src="/placeholder.svg?height=600&width=600"
-              alt="Signup illustration"
-              fill
-              className="object-contain"
-            />
-          </div>
+          <RobotCanvas className="w-full h-full max-w-lg" />
         </div>
       </div>
     </div>
   )
 }
-
