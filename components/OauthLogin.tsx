@@ -1,10 +1,14 @@
 import React from 'react'
 import { Button } from './ui/button'
 import { SignInGithub } from '@/lib/auth/action'
+import { usePathname } from 'next/navigation'
 
 const OauthLogin = () => {
+  const pathname = usePathname()
+  const isSignUpPage = pathname === '/signup'
+
   return (
-   <div className="flex flex-row gap-4 mb-6">
+   <div className="flex flex-col md:flex-row gap-4 mb-6">
               <Button
                 variant="outline"
                 className="w-full border-[#6E00FF]/30 hover:bg-[#6E00FF]/10 text-white bg-transparent"
@@ -28,7 +32,8 @@ const OauthLogin = () => {
                     d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                   />
                 </svg>
-                Sign in with Google
+                {/* show signin text if the pathname is signin else show signout */}
+                {isSignUpPage ? 'Sign Up with Google' : 'Sign In from Google'}
               </Button>
               <Button
                 variant="outline"
@@ -52,8 +57,9 @@ const OauthLogin = () => {
            3.286 0 .315.21.694.825.576C20.565 22.092 24 
            17.592 24 12.297c0-6.627-5.373-12-12-12"
                   />
-                </svg>
-                Sign in with GitHub
+                </svg> 
+                {/* show signin text if the pathname is signin else show signout */}
+                {isSignUpPage ? 'Sign Up with GitHub' : 'Sign In from GitHub'}
               </Button>
             </div>
   )

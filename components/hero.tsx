@@ -16,59 +16,59 @@ import Image from "next/image";
 import RobotCanvas from "./robot-model";
 
 
-function RobotModel({ mousePosition }:{mousePosition:any}) {
-  const group = useRef();
-  const { scene, animations } = useGLTF("/landingPageRobot.glb", true);
-  const { actions, mixer } = useAnimations(animations, group);
-  const modelRef = useRef();
+// function RobotModel({ mousePosition }:{mousePosition:any}) {
+//   const group = useRef();
+//   const { scene, animations } = useGLTF("/landingPageRobot.glb", true);
+//   const { actions, mixer } = useAnimations(animations, group);
+//   const modelRef = useRef();
 
-  useEffect(() => {
-    if (animations.length > 0) {
-      const animationNames = Object.keys(actions);
+//   useEffect(() => {
+//     if (animations.length > 0) {
+//       const animationNames = Object.keys(actions);
 
-      if (animationNames.length > 0) {
-        const action = actions[animationNames[0]];
-        if (action) {
-          action.reset().fadeIn(0.5).play();
-        }
-      } else {
-        animations.forEach((clip, index) => {
-          const action = mixer.clipAction(clip);
-          action.reset().fadeIn(0.5).play();
-        });
-      }
-    }
-  }, [scene, animations, actions, mixer]);
+//       if (animationNames.length > 0) {
+//         const action = actions[animationNames[0]];
+//         if (action) {
+//           action.reset().fadeIn(0.5).play();
+//         }
+//       } else {
+//         animations.forEach((clip, index) => {
+//           const action = mixer.clipAction(clip);
+//           action.reset().fadeIn(0.5).play();
+//         });
+//       }
+//     }
+//   }, [scene, animations, actions, mixer]);
 
-  useFrame((state, delta) => {
-    if (mixer) {
-      mixer.update(delta);
-    }
+//   useFrame((state, delta) => {
+//     if (mixer) {
+//       mixer.update(delta);
+//     }
 
-    if (modelRef.current && mousePosition) {
-      const targetRotationY =
-        (mousePosition.x / window.innerWidth - 0.5) * Math.PI * 0.5;
-      const targetRotationX =
-        (mousePosition.y / window.innerHeight - 0.5) * Math.PI * 0.25;
+//     if (modelRef.current && mousePosition) {
+//       const targetRotationY =
+//         (mousePosition.x / window.innerWidth - 0.5) * Math.PI * 0.5;
+//       const targetRotationX =
+//         (mousePosition.y / window.innerHeight - 0.5) * Math.PI * 0.25;
 
-      modelRef.current.rotation.y +=
-        (targetRotationY - modelRef.current.rotation.y) * 0.05;
-      modelRef.current.rotation.x +=
-        (targetRotationX - modelRef.current.rotation.x) * 0.05;
-    }
-  });
+//       modelRef.current.rotation.y +=
+//         (targetRotationY - modelRef.current.rotation.y) * 0.05;
+//       modelRef.current.rotation.x +=
+//         (targetRotationX - modelRef.current.rotation.x) * 0.05;
+//     }
+//   });
 
-  return (
-    <group ref={group}>
-      <primitive
-        ref={modelRef}
-        object={scene}
-        scale={2.4}
-        position={[0, -1, 0]}
-      />
-    </group>
-  );
-}
+//   return (
+//     <group ref={group}>
+//       <primitive
+//         ref={modelRef}
+//         object={scene}
+//         scale={2.4}
+//         position={[0, -1, 0]}
+//       />
+//     </group>
+//   );
+// }
 
 export default function Hero() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
