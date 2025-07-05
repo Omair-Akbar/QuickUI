@@ -541,6 +541,7 @@ export default function SignupPage() {
           <RobotCanvas className="w-full h-full max-w-lg" />
         </motion.div>
       </motion.div>
-    </div>
+    </div> 
   )
 }
+ 
