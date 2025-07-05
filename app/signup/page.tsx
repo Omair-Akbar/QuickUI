@@ -153,7 +153,7 @@ export default function SignupPage() {
       </div>
 
       {/* Right side - 3D Robot */}
-      <div className="hidden md:block w-1/2 bg-[#1A1A1A] relative">
+      <div className="hidden md:block w-1/2 relative">
         {/* Background effects - same as hero */}
         <div className="absolute inset-0 z-0 opacity-30">
           <div className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full bg-[#6E00FF]/30 blur-[100px]" />

@@ -16,7 +16,7 @@ export default function RootLayout({ children }) {
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
         <meta name="theme-color" content="#121212" />
       </head>
-      <body className="min-h-screen bg-[#121212] text-white">
+      <body className="min-h-screen bg-[#121212] text-white" suppressHydrationWarning> {/* <--- Add this here */}
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           {children}
         </ThemeProvider>
