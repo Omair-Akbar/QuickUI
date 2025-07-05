@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { ArrowLeft, CheckCircle } from "lucide-react"
+import RobotCanvas from "@/components/robot-model"
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("")
@@ -85,20 +86,16 @@ export default function ForgotPasswordPage() {
       </div>
 
       {/* Right side - Image */}
-      <div className="hidden md:block w-1/2 bg-[#1A1A1A] relative">
+      <div className="hidden md:block w-1/2 relative">
+        {/* Background effects - same as hero */}
         <div className="absolute inset-0 z-0 opacity-30">
           <div className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full bg-[#6E00FF]/30 blur-[100px]" />
           <div className="absolute bottom-1/4 right-1/4 w-64 h-64 rounded-full bg-[#6E00FF]/30 blur-[100px]" />
         </div>
+
+        {/* 3D Robot Container */}
         <div className="absolute inset-0 flex items-center justify-center p-12">
-          <div className="relative w-full h-full max-w-lg">
-            <Image
-              src="/placeholder.svg?height=600&width=600"
-              alt="Forgot password illustration"
-              fill
-              className="object-contain"
-            />
-          </div>
+          <RobotCanvas className="w-full h-full max-w-lg" />
         </div>
       </div>
     </div>

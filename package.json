@@ -41,6 +41,8 @@
     "@react-three/fiber": "latest",
     "@tanstack/react-table": "^8.21.3",
     "autoprefixer": "^10.4.20",
+    "axios": "^1.10.0",
+    "bcrypt": "^6.0.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "1.0.4",
@@ -53,6 +55,7 @@
     "framer-motion": "^12.6.3",
     "input-otp": "1.4.1",
     "lucide-react": "^0.454.0",
+    "mongoose": "^8.16.1",
     "next": "15.2.4",
     "next-auth": "^5.0.0-beta.29",
     "next-themes": "latest",
@@ -72,6 +75,7 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",

@@ -6,9 +6,10 @@ import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { Home, FileText, DollarSign, Info } from "lucide-react"
+import { Home, FileText, DollarSign, Info, ChevronDown } from "lucide-react"
 import logo from "@/public/logo.png"
 import text from "@/public/quickui.png"
+import { motion, AnimatePresence } from "framer-motion"
 
 // Animated Menu Button Component
 const AnimatedMenuButton: React.FC<{
@@ -24,16 +25,19 @@ const AnimatedMenuButton: React.FC<{
     >
       <div className="w-6 h-6 flex flex-col justify-center items-center">
         <span
-          className={`block h-0.5 w-6 bg-current transform transition-all duration-300 ${isOpen ? "rotate-45 translate-y-1" : "-translate-y-1"
-            }`}
+          className={`block h-0.5 w-6 bg-current transform transition-all duration-300 ${
+            isOpen ? "rotate-45 translate-y-1" : "-translate-y-1"
+          }`}
         />
         <span
-          className={`block h-0.5 w-6 bg-current transform transition-all duration-300 ${isOpen ? "opacity-0" : "opacity-100"
-            }`}
+          className={`block h-0.5 w-6 bg-current transform transition-all duration-300 ${
+            isOpen ? "opacity-0" : "opacity-100"
+          }`}
         />
         <span
-          className={`block h-0.5 w-6 bg-current transform transition-all duration-300 ${isOpen ? "-rotate-45 -translate-y-1" : "translate-y-1"
-            }`}
+          className={`block h-0.5 w-6 bg-current transform transition-all duration-300 ${
+            isOpen ? "-rotate-45 -translate-y-1" : "translate-y-1"
+          }`}
         />
       </div>
     </Button>
@@ -44,37 +48,91 @@ interface NavLinkProps {
   href: string
   children: React.ReactNode
   icon: React.ReactNode
-  dropdownItems?: { title: string; href: string }[]
+  dropdownItems?: { title: string; href: string; description?: string }[]
   isActive?: boolean
 }
 
 const NavLink: React.FC<NavLinkProps> = ({ href, children, icon, dropdownItems, isActive }) => {
+  const [isHovered, setIsHovered] = useState(false)
+
   if (dropdownItems && dropdownItems.length > 0) {
     return (
-      <div className="relative group">
+      <div className="relative" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
         <Link
           href={href}
-          className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 ${isActive
+          className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 ${
+            isActive
               ? "bg-[#6E00FF]/20 text-white shadow-lg shadow-[#6E00FF]/20"
               : "text-white/80 hover:text-white hover:bg-white/10"
-            }`}
+          }`}
         >
           <span className="text-lg">{icon}</span>
           <span className="hidden lg:block">{children}</span>
+          <motion.div
+            animate={{ rotate: isHovered ? 180 : 0 }}
+            transition={{ duration: 0.2 }}
+            className="hidden lg:block"
+          >
+            <ChevronDown size={14} className="ml-1" />
+          </motion.div>
         </Link>
-        <div className="absolute left-0 mt-2 w-48 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
-          <div className="bg-[#121212]/95 backdrop-blur-md border border-[#6E00FF]/30 rounded-xl shadow-xl py-2">
-            {dropdownItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="block px-4 py-2 text-white/80 hover:text-white hover:bg-[#6E00FF]/20 transition-colors"
+
+        <AnimatePresence>
+          {isHovered && (
+            <motion.div
+              initial={{ opacity: 0, y: 10, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 10, scale: 0.95 }}
+              transition={{
+                duration: 0.2,
+                ease: [0.23, 1, 0.32, 1],
+              }}
+              className="absolute left-0 mt-2 w-64 z-50"
+            >
+              <motion.div
+                initial={{ backdropFilter: "blur(0px)" }}
+                animate={{ backdropFilter: "blur(12px)" }}
+                className="bg-[#121212]/80 backdrop-blur-md border border-[#6E00FF]/30 rounded-2xl shadow-2xl shadow-[#6E00FF]/20 overflow-hidden"
               >
-                {item.title}
-              </Link>
-            ))}
-          </div>
-        </div>
+                <div className="p-2">
+                  {dropdownItems.map((item, index) => (
+                    <motion.div
+                      key={item.href}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{
+                        delay: index * 0.05,
+                        duration: 0.2,
+                      }}
+                    >
+                      <Link
+                        href={item.href}
+                        className="group block px-4 py-3 rounded-xl text-white/80 hover:text-white hover:bg-[#6E00FF]/20 transition-all duration-200 relative overflow-hidden"
+                      >
+                        <motion.div
+                          className="absolute inset-0 bg-gradient-to-r from-[#6E00FF]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                          layoutId={`dropdown-bg-${item.href}`}
+                        />
+                        <div className="relative z-10">
+                          <div className="font-medium text-sm">{item.title}</div>
+                          {item.description && <div className="text-xs text-white/60 mt-1">{item.description}</div>}
+                        </div>
+                      </Link>
+                    </motion.div>
+                  ))}
+                </div>
+
+                {/* Decorative gradient border */}
+                <div
+                  className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#6E00FF]/20 via-transparent to-[#6E00FF]/20 pointer-events-none"
+                  style={{ padding: "1px" }}
+                >
+                  <div className="w-full h-full bg-[#121212]/80 rounded-2xl" />
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     )
   }
@@ -82,10 +140,11 @@ const NavLink: React.FC<NavLinkProps> = ({ href, children, icon, dropdownItems, 
   return (
     <Link
       href={href}
-      className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 ${isActive
+      className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 ${
+        isActive
           ? "bg-[#6E00FF]/20 text-white shadow-lg shadow-[#6E00FF]/20"
           : "text-white/80 hover:text-white hover:bg-white/10"
-        }`}
+      }`}
     >
       <span className="text-lg">{icon}</span>
       <span className="hidden lg:block">{children}</span>
@@ -146,38 +205,41 @@ export default function Navbar() {
   }, [])
 
   const templateDropdownItems = [
-    { title: "Landing Pages", href: "/templates?query=landingpage" },
-    { title: "Dashboards", href: "/templates?query=dashboard" },
-    { title: "E-commerce", href: "/templates?query=ecommerce" },
-    { title: "Blogs", href: "/templates?query=blog" },
+    { title: "Landing Pages", href: "/templates?query=landingpage", description: "Beautiful landing page templates" },
+    { title: "Dashboards", href: "/templates?query=dashboard", description: "Admin and analytics dashboards" },
+    { title: "E-commerce", href: "/templates?query=ecommerce", description: "Online store templates" },
+    { title: "Blogs", href: "/templates?query=blog", description: "Blog and content templates" },
   ]
 
   const pricingDropdownItems = [
-    { title: "Personal", href: "/pricing#personal" },
-    { title: "Team", href: "/pricing#team" },
-    { title: "Enterprise", href: "/pricing#enterprise" },
+    { title: "Personal", href: "/pricing#personal", description: "Perfect for individuals" },
+    { title: "Team", href: "/pricing#team", description: "Collaborate with your team" },
+    { title: "Enterprise", href: "/pricing#enterprise", description: "Advanced features & support" },
   ]
 
   const aboutDropdownItems = [
-    { title: "Our Story", href: "/about#story" },
-    { title: "Team", href: "/about#team" },
-    { title: "Careers", href: "/about#careers" },
+    { title: "Our Story", href: "/about#story", description: "Learn about our journey" },
+    { title: "Team", href: "/about#team", description: "Meet the people behind QuickUI" },
+    { title: "Careers", href: "/about#careers", description: "Join our growing team" },
   ]
 
   const homeDropdownItems = [
-    { title: "Features", href: "/#features" },
-    { title: "Testimonials", href: "/#testimonials" },
-    { title: "FAQ", href: "/#faq" },
+    { title: "Features", href: "/#features", description: "Explore what we offer" },
+    { title: "Testimonials", href: "/#testimonials", description: "What our users say" },
+    { title: "FAQ", href: "/#faq", description: "Frequently asked questions" },
   ]
 
   return (
     <nav className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-6xl px-4">
-      <div
+      <motion.div
+        initial={{ y: -100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5, ease: [0.23, 1, 0.32, 1] }}
         className={`
-        bg-[#121212]/80 backdrop-blur-md border border-[#6E00FF]/20 
-        rounded-full shadow-2xl shadow-[#6E00FF]/10 transition-all duration-300
-        ${scrolled ? "bg-[#121212]/90" : "bg-[#121212]/80"}
-      `}
+          bg-[#121212]/80 backdrop-blur-md border border-[#6E00FF]/20 
+          rounded-full shadow-2xl shadow-[#6E00FF]/10 transition-all duration-300
+          ${scrolled ? "bg-[#121212]/90" : "bg-[#121212]/80"}
+        `}
       >
         <div className="flex items-center justify-between px-6 py-3">
           {/* Logo */}
@@ -247,121 +309,96 @@ export default function Navbar() {
         </div>
 
         {/* Mobile Rectangle Menu */}
-        <div
-          className={`
-    fixed top-20 right-4 w-64 bg-[#121212]/90 backdrop-blur-md 
-    border border-[#6E00FF]/30 rounded-2xl shadow-2xl shadow-[#6E00FF]/20
-    transform transition-all duration-300 ease-in-out z-50
-    ${mobileMenuOpen ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-95 -translate-y-2 pointer-events-none"}
-    md:hidden
-  `}
-        >
-          <div className="p-4">
-            {/* Close button */}
-            {/* <div className="flex justify-end mb-4">
-              <AnimatedMenuButton isOpen={mobileMenuOpen} onClick={() => setMobileMenuOpen(false)} />
-            </div> */}
-
-            {/* Navigation Items with icons on right */}
-            <div className="space-y-2">
-              <Link
-                href="/"
-                className={`flex items-center justify-between p-3 rounded-xl transition-all duration-300 group ${pathname === "/"
-                    ? "bg-[#6E00FF]/20 text-white shadow-lg shadow-[#6E00FF]/20"
-                    : "text-white/80 hover:text-white hover:bg-white/10"
-                  }`}
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                <span className="font-medium">Home</span>
-                <div
-                  className={`p-2 rounded-lg transition-all duration-300 ${pathname === "/" ? "bg-[#6E00FF]/30" : "bg-white/10 group-hover:bg-white/20"
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: -10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: -10 }}
+              transition={{ duration: 0.2 }}
+              className="fixed top-20 right-4 w-64 bg-[#121212]/90 backdrop-blur-md border border-[#6E00FF]/30 rounded-2xl shadow-2xl shadow-[#6E00FF]/20 z-50 md:hidden"
+            >
+              <div className="p-4">
+                {/* Navigation Items with icons on right */}
+                <div className="space-y-2">
+                  <Link
+                    href="/"
+                    className={`flex items-center justify-between p-3 rounded-xl transition-all duration-300 group text-white/80 hover:text-white hover:bg-white/10`}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <span className="font-medium">Home</span>
+                    <div
+                      className={`p-2 rounded-full transition-all duration-300 group-hover:bg-white/20`}
+                    >
+                      <Home size={18} />
+                    </div>
+                  </Link>
+                  <Link
+                    href="/templates"
+                    className={`flex items-center justify-between p-3 rounded-xl transition-all duration-300 group ${
+                      pathname === "/templates" || pathname.startsWith("/templates?")
+                        ? "bg-[#6E00FF]/20 text-white shadow-lg shadow-[#6E00FF]/20"
+                        : "text-white/80 hover:text-white hover:bg-white/10"
                     }`}
-                >
-                  <Home size={18} />
-                </div>
-              </Link>
-
-              <Link
-                href="/templates"
-                className={`flex items-center justify-between p-3 rounded-xl transition-all duration-300 group ${pathname === "/templates" || pathname.startsWith("/templates?")
-                    ? "bg-[#6E00FF]/20 text-white shadow-lg shadow-[#6E00FF]/20"
-                    : "text-white/80 hover:text-white hover:bg-white/10"
-                  }`}
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                <span className="font-medium">Templates</span>
-                <div
-                  className={`p-2 rounded-lg transition-all duration-300 ${pathname === "/templates" || pathname.startsWith("/templates?")
-                      ? "bg-[#6E00FF]/30"
-                      : "bg-white/10 group-hover:bg-white/20"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <span className="font-medium">Templates</span>
+                    <div
+                      className={`p-2 rounded-full transition-all duration-300 group-hover:bg-white/20`}
+                    >
+                      <FileText size={18} />
+                    </div>
+                  </Link>
+                  <Link
+                    href="/pricing"
+                    className={`flex items-center justify-between p-3 rounded-xl transition-all duration-300 group ${
+                      pathname === "/pricing"
+                        ? "bg-[#6E00FF]/20 text-white shadow-lg shadow-[#6E00FF]/20"
+                        : "text-white/80 hover:text-white hover:bg-white/10"
                     }`}
-                >
-                  <FileText size={18} />
-                </div>
-              </Link>
-
-              <Link
-                href="/pricing"
-                className={`flex items-center justify-between p-3 rounded-xl transition-all duration-300 group ${pathname === "/pricing"
-                    ? "bg-[#6E00FF]/20 text-white shadow-lg shadow-[#6E00FF]/20"
-                    : "text-white/80 hover:text-white hover:bg-white/10"
-                  }`}
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                <span className="font-medium">Pricing</span>
-                <div
-                  className={`p-2 rounded-lg transition-all duration-300 ${pathname === "/pricing" ? "bg-[#6E00FF]/30" : "bg-white/10 group-hover:bg-white/20"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <span className="font-medium">Pricing</span>
+                    <div
+                      className={`p-2 rounded-full transition-all duration-300 group-hover:bg-white/20 `}
+                    >
+                      <DollarSign size={18} />
+                    </div>
+                  </Link>
+                  <Link
+                    href="/about"
+                    className={`flex items-center justify-between p-3 rounded-xl transition-all duration-300 group ${
+                      pathname === "/about"
+                        ? "bg-[#6E00FF]/20 text-white shadow-lg shadow-[#6E00FF]/20"
+                        : "text-white/80 hover:text-white hover:bg-white/10"
                     }`}
-                >
-                  <DollarSign size={18} />
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <span className="font-medium">About</span>
+                    <div
+                      className={`p-2 rounded-full transition-all duration-300 group-hover:bg-white/20
+                      `}
+                    >
+                      <Info size={18} />
+                    </div>
+                  </Link>
                 </div>
-              </Link>
 
-              <Link
-                href="/about"
-                className={`flex items-center justify-between p-3 rounded-xl transition-all duration-300 group ${pathname === "/about"
-                    ? "bg-[#6E00FF]/20 text-white shadow-lg shadow-[#6E00FF]/20"
-                    : "text-white/80 hover:text-white hover:bg-white/10"
-                  }`}
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                <span className="font-medium">About</span>
-                <div
-                  className={`p-2 rounded-lg transition-all duration-300 ${pathname === "/about" ? "bg-[#6E00FF]/30" : "bg-white/10 group-hover:bg-white/20"
-                    }`}
-                >
-                  <Info size={18} />
+                {/* Get Started Button */}
+                <div className="mt-4 pt-4 border-t border-[#6E00FF]/20">
+                  <AnimatedButton
+                    href="/signup"
+                    className="w-full justify-center"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Get Started
+                  </AnimatedButton>
                 </div>
-              </Link>
-            </div>
-
-            {/* Get Started Button */}
-            <div className="mt-4 pt-4 border-t border-[#6E00FF]/20">
-              <AnimatedButton href="/signup" className="w-full justify-center" onClick={() => setMobileMenuOpen(false)}>
-                Get Started
-              </AnimatedButton>
-            </div>
-          </div>
-        </div>
-
-        {/* Enhanced Themed Overlay */}
-        {/* {mobileMenuOpen && (
-          <div
-            className="fixed inset-0 z-40 md:hidden"
-            style={{
-              background: `
-        radial-gradient(circle at center, 
-          rgba(110, 0, 255, 0.1) 0%, 
-          rgba(18, 18, 18, 0.8) 50%, 
-          rgba(0, 0, 0, 0.9) 100%
-        )
-      `,
-              backdropFilter: "blur(8px)",
-            }}
-            onClick={() => setMobileMenuOpen(false)}
-          />
-        )} */}
-      </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
     </nav>
   )
 }
